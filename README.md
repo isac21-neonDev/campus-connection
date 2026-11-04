@@ -76,4 +76,4 @@ $course = Course::where('code', 'BCS101')->firstOrFail();
 $registeredStudents = $course->students;
 ```
 
-The Campus Service Portal pages are available as Blade views from `/` and `/portal/`. The 25 views are in `resources/views/campus-service-portal`; their images and stylesheets are in `public/campus-service-portal`.
+The Kampus Konnect pages are available as Blade views from `/` and `/portal/`. The 25 views are in `resources/views/campus-service-portal`; their images and stylesheets are in `public/campus-service-portal`.

@@ -1,6 +1,6 @@
-# Campus Service Portal — Frontend Prototype (MUBS)
+# Kampus Konnect — Frontend Prototype (MUBS)
 
-Static HTML + Tailwind CSS screens for the Campus Service Portal (Version 1.1 spec). No Laravel and no project JavaScript — each page contains its own header, sidebar, and footer.
+Static HTML + Tailwind CSS screens for the Kampus Konnect (Version 1.1 spec). No Laravel and no project JavaScript — each page contains its own header, sidebar, and footer.
 
 ## Design
 

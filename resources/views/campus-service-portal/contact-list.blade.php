@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact list | Campus Service Portal</title>
+    <title>Contact list | Kampus Konnect</title>
     <meta name="description" content="Messages sent to the campus helpdesk.">
     <link rel="icon" type="image/png" href="/campus-service-portal/assets/img/logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -33,9 +33,9 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
                 <a href="/portal/index.html" class="flex items-center gap-3">
-                    <img src="/campus-service-portal/assets/img/logo.png" alt="Campus Service Portal" class="h-11 w-11">
+                    <img src="/campus-service-portal/assets/img/logo.png" alt="Kampus Konnect" class="h-11 w-11">
                     <div class="hidden sm:block">
-                        <p class="text-sm font-semibold text-slate-900 leading-tight">Campus Service Portal</p>
+                        <p class="text-sm font-semibold text-slate-900 leading-tight">Kampus Konnect</p>
                         <p class="text-[11px] text-slate-500">Helpdesk for students and staff</p>
                     </div>
                 </a>
@@ -136,7 +136,7 @@
                 <div>
                     <div class="flex items-center gap-3 mb-6">
                         <img src="/campus-service-portal/assets/img/logo.png" alt="" class="h-12 w-12">
-                        <span class="font-semibold">Campus Service Portal</span>
+                        <span class="font-semibold">Kampus Konnect</span>
                     </div>
                     <p class="text-blue-100 text-sm leading-relaxed max-w-sm">The campus helpdesk for repairs, room bookings, and ICT support. Sign in with your campus email.</p>
                 </div>
@@ -171,7 +171,7 @@
                 </div>
             </div>
             <div class="pt-8 border-t border-blue-800 flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-blue-200">
-                <p>© 2026 Campus Service Portal. All rights reserved.</p>
+                <p>© 2026 Kampus Konnect. All rights reserved.</p>
                 <p>Privacy · Acceptable use · Helpdesk policy</p>
             </div>
         </div>
