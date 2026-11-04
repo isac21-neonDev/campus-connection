@@ -1,4 +1,4 @@
-/* Campus Service Portal — light theme, education blue + gold */
+/* Kampus Konnect — light theme, education blue + gold */
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -14,6 +14,12 @@ body {
     -moz-osx-font-smoothing: grayscale;
     background: #ffffff;
     color: #0f172a;
+}
+
+img[src*="assets/img/logo.png"] {
+    border-radius: 50%;
+    object-fit: cover;
+    transform: scale(1.12);
 }
 
 .text-gradient {

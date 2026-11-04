@@ -7,7 +7,7 @@ test('the portal homepage and nested pages are served from Blade views', functio
 
     $this->get('/portal/admin/users/index.html')
         ->assertOk()
-        ->assertSee('Users — Campus Service Portal')
+        ->assertSee('Users — Kampus Konnect')
         ->assertSee('/campus-service-portal/assets/css/styles.css', false);
 });
 

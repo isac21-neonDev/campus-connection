@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Choose a new password — Campus Service Portal</title>
+    <title>Choose a new password — Kampus Konnect</title>
     <link rel="icon" type="image/png" href="/campus-service-portal/assets/img/logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,7 +22,7 @@
         <div class="w-full max-w-md">
             <!-- Start: Brand -->
             <div class="flex justify-center mb-8">
-                <a href="/portal/index.html"><img src="/campus-service-portal/assets/img/logo.png" alt="Campus Service Portal" class="h-16 w-16"></a>
+                <a href="/portal/index.html"><img src="/campus-service-portal/assets/img/logo.png" alt="Kampus Konnect" class="h-16 w-16"></a>
             </div>
             <!-- End: Brand -->
 
@@ -53,7 +53,7 @@
     <footer class="bg-[#1e3a8a]">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div class="flex flex-col md:flex-row justify-between items-center gap-3">
-                <p class="text-sm text-blue-100">© 2026 <span class="font-semibold text-white">Campus Service Portal</span>. All rights reserved.</p>
+                <p class="text-sm text-blue-100">© 2026 <span class="font-semibold text-white">Kampus Konnect</span>. All rights reserved.</p>
                 <p class="text-sm text-blue-200">Estates · ICT · Halls · Hostels · Registry</p>
             </div>
         </div>
