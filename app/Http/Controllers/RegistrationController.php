@@ -94,18 +94,14 @@ class RegistrationController extends Controller
 
     protected function visibleRegistrations()
     {
-        $role = $this->currentRole();
+        $user = auth()->user();
 
         $query = CourseRegistration::query()->with(['student', 'course']);
 
-        if ($role === 'student' && auth()->check()) {
-            $student = Student::where('email', auth()->user()->email)->first();
-
-            if ($student) {
-                return $query->where('student_id', $student->id)->orderBy('created_at', 'desc')->get();
-            }
-
-            return collect();
+        if ($user->hasRole('lecturer')) {
+            $query->whereHas('course', fn ($courses) => $courses->where('lecturer_id', $user->id));
+        } elseif ($user->hasRole('student')) {
+            $query->whereHas('student', fn ($students) => $students->where('user_id', $user->id));
         }
 
         return $query->orderBy('created_at', 'desc')->get();
@@ -113,11 +109,6 @@ class RegistrationController extends Controller
 
     protected function canManageRegistrations(): bool
     {
-        return in_array($this->currentRole(), ['admin', 'lecturer'], true);
-    }
-
-    protected function currentRole(): string
-    {
-        return auth()->user()->role ?? 'admin';
+        return auth()->user()->can('registrations.manage');
     }
 }

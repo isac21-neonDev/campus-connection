@@ -1,4 +1,3 @@
-@verbatim
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -79,7 +78,10 @@
                             </div>
                             <a href="/portal/profile.html" class="flex items-center px-4 py-2 text-sm text-slate-600 hover:bg-slate-50"><i data-lucide="user" class="w-4 h-4 mr-2"></i>My Profile</a>
                             <a href="/portal/profile.html" class="flex items-center px-4 py-2 text-sm text-slate-600 hover:bg-slate-50"><i data-lucide="settings" class="w-4 h-4 mr-2"></i>Account Settings</a>
-                            <a href="/portal/login.html" class="flex items-center px-4 py-2 text-sm text-[#d97706] hover:bg-slate-50 border-t border-slate-200"><i data-lucide="log-out" class="w-4 h-4 mr-2"></i>Sign out</a>
+                            <form method="POST" action="{{ route('logout') }}" class="border-t border-slate-200">
+                                @csrf
+                                <button type="submit" class="flex w-full items-center px-4 py-2 text-left text-sm text-[#d97706] hover:bg-slate-50"><i data-lucide="log-out" class="w-4 h-4 mr-2"></i>Sign out</button>
+                            </form>
                         </div>
                     </details>
                     <!-- End: Header user menu -->
@@ -192,4 +194,3 @@
 </body>
 </html>
 
-@endverbatim

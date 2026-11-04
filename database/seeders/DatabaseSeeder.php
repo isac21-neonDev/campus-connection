@@ -8,6 +8,7 @@ use App\Models\Student;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -18,22 +19,44 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->call(RoleAndPermissionSeeder::class);
+
         $users = [
-            ['name' => 'Admin User', 'email' => 'admin@gmail.com', 'password' => 'admin123', 'role' => 'admin'],
-            ['name' => 'Student User', 'email' => 'student@gmail.com', 'password' => 'student123', 'role' => 'student'],
+            ['name' => 'Admin User', 'email' => 'admin@gmail.com', 'password' => 'admin123', 'role' => 'administrator'],
+            ['name' => 'Student User', 'email' => 'isaac@gmail.com', 'password' => 'student123', 'role' => 'student'],
             ['name' => 'Lecturer User', 'email' => 'lecturer@gmail.com', 'password' => 'lecturer123', 'role' => 'lecturer'],
         ];
 
-        foreach ($users as $user) {
-            User::firstOrCreate(
-                ['email' => $user['email']],
+        $seededUsers = [];
+
+        foreach ($users as $userData) {
+            $user = User::updateOrCreate(
+                ['email' => $userData['email']],
                 [
-                    'name' => $user['name'],
-                    'password' => bcrypt($user['password']),
-                    'role' => $user['role'],
+                    'name' => $userData['name'],
+                    'password' => Hash::make($userData['password']),
+                    'role' => $userData['role'],
                 ],
             );
+
+            $user->syncRoles($userData['role']);
+            $seededUsers[$userData['role']] = $user;
         }
+
+        User::with('roles')->get()->each(function (User $user): void {
+            if ($user->roles->isNotEmpty()) {
+                return;
+            }
+
+            $role = match ($user->role) {
+                'admin', 'administrator' => 'administrator',
+                'lecturer' => 'lecturer',
+                default => 'student',
+            };
+
+            $user->syncRoles($role);
+            $user->forceFill(['role' => $role])->save();
+        });
 
         $students = [
             ['student_number' => 'STU001', 'first_name' => 'Isaac', 'last_name' => 'Kasasa', 'email' => 'isaac@gmail.com', 'programme' => 'BSc Computer Science', 'year_of_study' => 2],
@@ -50,6 +73,9 @@ class DatabaseSeeder extends Seeder
             );
         }
 
+        Student::where('student_number', 'STU001')
+            ->update(['user_id' => $seededUsers['student']->id]);
+
         $courses = [
             ['code' => 'BCS101', 'title' => 'Web Application Development', 'description' => 'Introduction to building and deploying web applications.', 'credit_units' => 3],
             ['code' => 'BCS102', 'title' => 'Database Systems', 'description' => 'Design, implementation, and management of relational databases.', 'credit_units' => 3],
@@ -60,7 +86,7 @@ class DatabaseSeeder extends Seeder
         foreach ($courses as $course) {
             Course::updateOrCreate(
                 ['code' => $course['code']],
-                $course,
+                array_merge($course, ['lecturer_id' => $seededUsers['lecturer']->id]),
             );
         }
 

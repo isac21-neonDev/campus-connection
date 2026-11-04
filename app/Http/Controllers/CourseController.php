@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Course;
-use App\Models\Student;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -21,7 +21,7 @@ class CourseController extends Controller
 
     public function create(): View
     {
-        return view('courses.create');
+        return view('courses.create', ['lecturers' => User::role('lecturer')->orderBy('name')->get()]);
     }
 
     public function store(Request $request): RedirectResponse
@@ -31,6 +31,11 @@ class CourseController extends Controller
             'title' => ['required', 'string', 'max:150'],
             'description' => ['nullable', 'string'],
             'credit_units' => ['nullable', 'integer', 'min:1', 'max:12'],
+            'lecturer_id' => ['nullable', 'integer', 'exists:users,id', function ($attribute, $value, $fail): void {
+                if ($value && ! User::role('lecturer')->whereKey($value)->exists()) {
+                    $fail('The selected user is not a lecturer.');
+                }
+            }],
         ]);
 
         Course::create($validated);
@@ -45,7 +50,10 @@ class CourseController extends Controller
 
     public function edit(Course $course): View
     {
-        return view('courses.edit', compact('course'));
+        return view('courses.edit', [
+            'course' => $course,
+            'lecturers' => User::role('lecturer')->orderBy('name')->get(),
+        ]);
     }
 
     public function update(Request $request, Course $course): RedirectResponse
@@ -55,6 +63,11 @@ class CourseController extends Controller
             'title' => ['required', 'string', 'max:150'],
             'description' => ['nullable', 'string'],
             'credit_units' => ['nullable', 'integer', 'min:1', 'max:12'],
+            'lecturer_id' => ['nullable', 'integer', 'exists:users,id', function ($attribute, $value, $fail): void {
+                if ($value && ! User::role('lecturer')->whereKey($value)->exists()) {
+                    $fail('The selected user is not a lecturer.');
+                }
+            }],
         ]);
 
         $course->update($validated);
@@ -71,12 +84,10 @@ class CourseController extends Controller
 
     protected function visibleCourses()
     {
-        $role = $this->currentRole();
+        $user = auth()->user();
 
-        if ($role === 'student' && auth()->check()) {
-            $student = Student::where('email', auth()->user()->email)->first();
-
-            return $student ? $student->courses()->orderBy('title')->get() : collect();
+        if ($user->hasRole('lecturer')) {
+            return Course::where('lecturer_id', $user->id)->orderBy('title')->get();
         }
 
         return Course::orderBy('title')->get();
@@ -84,11 +95,6 @@ class CourseController extends Controller
 
     protected function canManageCourses(): bool
     {
-        return in_array($this->currentRole(), ['admin', 'lecturer'], true);
-    }
-
-    protected function currentRole(): string
-    {
-        return auth()->user()->role ?? 'admin';
+        return auth()->user()->can('courses.manage');
     }
 }

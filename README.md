@@ -77,3 +77,27 @@ $registeredStudents = $course->students;
 ```
 
 The Kampus Konnect pages are available as Blade views from `/` and `/portal/`. The 25 views are in `resources/views/campus-service-portal`; their images and stylesheets are in `public/campus-service-portal`.
+
+## Authentication, roles, and permissions
+
+Session authentication uses Laravel's `web` guard. Role and permission records are managed with `spatie/laravel-permission`. Run the following after pulling the project:
+
+```sh
+composer install
+php artisan migrate
+php artisan db:seed
+```
+
+The role seeder creates `administrator`, `lecturer`, and `student` roles with resource permissions. Administrators can manage students, courses, registrations, and user roles at `/admin/users`. Lecturers can view only their assigned courses and the students registered in those courses. Students can browse all courses and view only registrations linked to their student profile.
+
+Student self-registration is limited to email addresses already present in the `students` table; submitted role values are ignored. Link additional student records to an account through their matching campus email. Assign lecturers to courses with the `lecturer_id` field on `courses`.
+
+Development seed accounts:
+
+| Role | Email | Password |
+| --- | --- | --- |
+| Administrator | `admin@gmail.com` | `admin123` |
+| Lecturer | `lecturer@gmail.com` | `lecturer123` |
+| Student | `isaac@gmail.com` | `student123` |
+
+These credentials are for local coursework/testing only. Change or remove them before deploying to a shared or production environment.

@@ -27,6 +27,15 @@
                         <input type="text" name="title" class="form-control" value="{{ old('title', $course->title) }}" required>
                     </div>
                     <div class="col-12">
+                        <label for="lecturer_id" class="form-label">Assigned Lecturer</label>
+                        <select id="lecturer_id" name="lecturer_id" class="form-select">
+                            <option value="">Unassigned</option>
+                            @foreach ($lecturers as $lecturer)
+                                <option value="{{ $lecturer->id }}" @selected(old('lecturer_id', $course->lecturer_id) == $lecturer->id)>{{ $lecturer->name }} ({{ $lecturer->email }})</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-12">
                         <label class="form-label">Description</label>
                         <textarea name="description" rows="4" class="form-control">{{ old('description', $course->description) }}</textarea>
                     </div>

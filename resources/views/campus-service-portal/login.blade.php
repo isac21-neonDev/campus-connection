@@ -1,4 +1,3 @@
-@verbatim
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -37,7 +36,11 @@
                 </div>
 
                 <!-- Start: Sign in form -->
-                <form action="/portal/dashboard.html" method="get" class="space-y-5">
+                <form action="/login" method="post" class="space-y-5">
+                    @csrf
+                    @if ($errors->any())
+                        <p class="text-sm text-red-600" role="alert">{{ $errors->first() }}</p>
+                    @endif
                     <div>
                         <label for="email" class="block text-sm font-medium text-slate-600 mb-2">Campus email</label>
                         <div class="relative">
@@ -69,17 +72,6 @@
                 </form>
                 <!-- End: Sign in form -->
 
-                <!-- Start: Demo accounts -->
-                <div class="mt-6 pt-6 border-t border-slate-200">
-                    <p class="text-xs text-slate-500 mb-3 text-center">Try a demo account</p>
-                    <div class="grid grid-cols-3 gap-2">
-                        <a href="/portal/dashboard.html" class="text-center text-xs px-2 py-2 rounded-lg border border-slate-200 bg-white hover:border-[#2563eb]">Student</a>
-                        <a href="/portal/staff/dashboard.html" class="text-center text-xs px-2 py-2 rounded-lg border border-slate-200 bg-white hover:border-[#d97706]">Staff</a>
-                        <a href="/portal/admin/dashboard.html" class="text-center text-xs px-2 py-2 rounded-lg border border-slate-200 bg-white hover:border-[#2563eb]">Admin</a>
-                    </div>
-                </div>
-                <!-- End: Demo accounts -->
-
                 <p class="mt-6 text-center text-sm text-slate-500">
                     New here?
                     <a href="/portal/register.html" class="text-[#2563eb] hover:text-[#1d4ed8]">Create an account</a>
@@ -104,4 +96,3 @@
 </body>
 </html>
 
-@endverbatim

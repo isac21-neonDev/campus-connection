@@ -16,5 +16,6 @@ test('database seeder can run repeatedly without creating duplicate records', fu
     expect(User::count())->toBe(3)
         ->and(Student::count())->toBe(5)
         ->and(Course::count())->toBe(4)
-        ->and(CourseRegistration::count())->toBe(5);
+        ->and(CourseRegistration::count())->toBe(5)
+        ->and(User::where('email', 'isaac@gmail.com')->first()->hasRole('student'))->toBeTrue();
 });

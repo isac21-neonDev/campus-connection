@@ -74,24 +74,20 @@ class StudentController extends Controller
 
     public function visibleStudents()
     {
-        $role = $this->currentRole();
+        $user = auth()->user();
+        $query = Student::query();
 
-        if ($role === 'student' && auth()->check()) {
-            $student = Student::where('email', auth()->user()->email)->first();
-
-            return $student ? collect([$student]) : collect();
+        if ($user->hasRole('lecturer')) {
+            $query->whereHas('courses', fn ($courses) => $courses->where('lecturer_id', $user->id));
+        } elseif ($user->hasRole('student')) {
+            $query->where('user_id', $user->id);
         }
 
-        return Student::orderBy('last_name')->get();
+        return $query->orderBy('last_name')->get();
     }
 
     public function canManageStudents(): bool
     {
-        return in_array($this->currentRole(), ['admin', 'lecturer'], true);
-    }
-
-    protected function currentRole(): string
-    {
-        return auth()->user()->role ?? 'admin';
+        return auth()->user()->can('students.manage');
     }
 }

@@ -7,7 +7,10 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
 </head>
 <body>
-    @php $role = auth()->user()->role ?? 'admin'; @endphp
+    @php
+        $user = auth()->user();
+        $role = $user->getRoleNames()->first();
+    @endphp
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
         <div class="container">
@@ -18,18 +21,22 @@
             <div class="collapse navbar-collapse" id="mainNav">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item"><a class="nav-link" href="{{ url('/') }}">Home</a></li>
-                    @if(in_array($role, ['admin', 'lecturer'], true))
+                    @if($user->can('students.view'))
                         <li class="nav-item"><a class="nav-link" href="{{ route('students.index') }}">Students</a></li>
                     @endif
                     <li class="nav-item"><a class="nav-link" href="{{ route('courses.index') }}">Courses</a></li>
-                    @if(in_array($role, ['admin', 'lecturer'], true))
+                    @if($user->can('registrations.view'))
                         <li class="nav-item"><a class="nav-link" href="{{ route('registrations.index') }}">Registrations</a></li>
                     @endif
-                    @if($role === 'student')
-                        <li class="nav-item"><a class="nav-link" href="{{ route('registrations.index') }}">My Registrations</a></li>
+                    @if($user->can('users.view'))
+                        <li class="nav-item"><a class="nav-link" href="{{ route('admin.users.index') }}">User Access</a></li>
                     @endif
                 </ul>
                 <span class="navbar-text text-white-50">Role: {{ ucfirst($role) }}</span>
+                <form method="POST" action="{{ route('logout') }}" class="ms-3">
+                    @csrf
+                    <button type="submit" class="btn btn-outline-light btn-sm">Sign out</button>
+                </form>
             </div>
         </div>
     </nav>

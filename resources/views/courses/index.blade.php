@@ -22,6 +22,7 @@
                                 <th>Code</th>
                                 <th>Title</th>
                                 <th>Credits</th>
+                                <th>Lecturer</th>
                                 <th>Description</th>
                                 @if($canManageCourses)
                                     <th>Actions</th>
@@ -34,6 +35,7 @@
                                     <td>{{ $course->code }}</td>
                                     <td>{{ $course->title }}</td>
                                     <td>{{ $course->credit_units ?? '—' }}</td>
+                                    <td>{{ $course->lecturer?->name ?? 'Unassigned' }}</td>
                                     <td>{{ $course->description ?? '—' }}</td>
                                     @if($canManageCourses)
                                         <td>

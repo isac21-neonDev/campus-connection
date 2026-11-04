@@ -1,4 +1,3 @@
-@verbatim
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,12 +29,16 @@
             <div class="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8">
                 <div class="mb-6">
                     <h1 class="text-xl font-bold">Create your account</h1>
-                    <p class="mt-1 text-sm text-slate-500">Students and lecturers can sign up here. If you work in a department such as Estates, ICT, or Halls, ask the helpdesk admin to add you.</p>
+                    <p class="mt-1 text-sm text-slate-500">Student accounts are linked to your campus student record. Ask the helpdesk administrator to create staff and administrator accounts.</p>
                     <p class="mt-2 text-xs text-[#d97706]">All fields are required.</p>
                 </div>
 
                 <!-- Start: Register form -->
-                <form action="/portal/dashboard.html" method="get" class="space-y-4">
+                <form action="/register" method="post" class="space-y-4">
+                    @csrf
+                    @if ($errors->any())
+                        <p class="text-sm text-red-600" role="alert">{{ $errors->first() }}</p>
+                    @endif
                     <div>
                         <label for="name" class="block text-sm font-medium text-slate-600 mb-2">Full name <span class="text-[#d97706]">*</span></label>
                         <input type="text" id="name" name="name" required minlength="2" autofocus placeholder="Aisha Namuli" class="input-field">
@@ -43,13 +46,6 @@
                     <div>
                         <label for="email" class="block text-sm font-medium text-slate-600 mb-2">Campus email <span class="text-[#d97706]">*</span></label>
                         <input type="email" id="email" name="email" required placeholder="aisha.namuli@campus.ac.ug" class="input-field">
-                    </div>
-                    <div>
-                        <label for="role" class="block text-sm font-medium text-slate-600 mb-2">I am a <span class="text-[#d97706]">*</span></label>
-                        <select id="role" name="role" required class="input-field">
-                            <option value="student">Student</option>
-                            <option value="staff">Staff</option>
-                        </select>
                     </div>
                     <div>
                         <label for="password" class="block text-sm font-medium text-slate-600 mb-2">Password <span class="text-[#d97706]">*</span></label>
@@ -68,12 +64,8 @@
                     <a href="/portal/login.html" class="text-[#2563eb] hover:text-[#1d4ed8]">Sign in</a>
                 </p>
             </div>
-            <!-- End: Register card -->
         </div>
     </div>
-    <!-- End: Register -->
-
-    <!-- Start: Footer -->
     <footer class="bg-[#1e3a8a]">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div class="flex flex-col md:flex-row justify-between items-center gap-3">
@@ -87,4 +79,3 @@
 </body>
 </html>
 
-@endverbatim
