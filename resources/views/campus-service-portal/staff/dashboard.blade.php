@@ -64,17 +64,17 @@
                     <!-- Start: Header user menu -->
                     <details class="menu-dropdown relative">
                         <summary class="flex items-center gap-2 bg-slate-50 rounded-lg p-1 text-sm border border-slate-200 hover:bg-slate-100 cursor-pointer list-none">
-                            <div class="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-[#2563eb] border border-blue-100 text-xs font-semibold">DO</div>
+                            <div class="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-[#2563eb] border border-blue-100 text-xs font-semibold">{{ mb_strtoupper(mb_substr(auth()->user()->name, 0, 1)) }}</div>
                             <div class="hidden md:block text-left mr-1">
-                                <div class="text-xs font-medium text-slate-900">Daniel Okello</div>
-                                <div class="text-[10px] text-slate-500">Estates staff</div>
+                                <div class="text-xs font-medium text-slate-900">{{ auth()->user()->name }}</div>
+                                <div class="text-[10px] text-slate-500">{{ ucfirst(str_replace('_', ' ', auth()->user()->getRoleNames()->first() ?? 'user')) }}</div>
                             </div>
                             <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400"></i>
                         </summary>
                         <div class="absolute right-0 mt-2 w-56 bg-white border border-slate-200 rounded-lg shadow-lg z-50">
                             <div class="px-4 py-3 border-b border-slate-200 bg-slate-50">
-                                <p class="text-sm font-medium">Daniel Okello</p>
-                                <p class="text-xs text-slate-500 truncate">daniel.okello@campus.ac.ug</p>
+                                <p class="text-sm font-medium">{{ auth()->user()->name }}</p>
+                                <p class="text-xs text-slate-500 truncate">{{ auth()->user()->email }}</p>
                             </div>
                             <a href="/portal/profile.html" class="flex items-center px-4 py-2 text-sm text-slate-600 hover:bg-slate-50"><i data-lucide="user" class="w-4 h-4 mr-2"></i>My Profile</a>
                             <a href="/portal/profile.html" class="flex items-center px-4 py-2 text-sm text-slate-600 hover:bg-slate-50"><i data-lucide="settings" class="w-4 h-4 mr-2"></i>Account Settings</a>
@@ -100,12 +100,12 @@
         <div class="mt-auto border-t border-slate-200 p-4">
             <div class="flex items-center space-x-3 mb-3">
                 <div class="relative">
-                    <div class="w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center bg-white text-sm font-semibold text-[#2563eb]">DO</div>
+                    <div class="w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center bg-white text-sm font-semibold text-[#2563eb]">{{ mb_strtoupper(mb_substr(auth()->user()->name, 0, 1)) }}</div>
                     <div class="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full"></div>
                 </div>
                 <div class="flex-1 min-w-0">
-                    <p class="text-sm font-medium text-slate-900 truncate">Daniel Okello</p>
-                    <p class="text-xs text-slate-500 truncate">daniel.okello@campus.ac.ug</p>
+                    <p class="text-sm font-medium text-slate-900 truncate">{{ auth()->user()->name }}</p>
+                    <p class="text-xs text-slate-500 truncate">{{ auth()->user()->email }}</p>
                 </div>
             </div>
             <div class="flex items-center gap-2 px-3 py-2 bg-white rounded-lg border border-slate-200">
@@ -123,7 +123,7 @@
 
             <!-- Start: Page heading -->
             <div class="mb-6">
-                <h1 class="text-2xl font-bold">Good afternoon, Daniel</h1>
+                <h1 class="text-2xl font-bold">Good afternoon, {{ explode(' ', trim(auth()->user()->name))[0] }}</h1>
                 <p class="text-slate-500 mt-1">Estates has 18 open jobs. Three have had no update since Thursday.</p>
             </div>
             <!-- End: Page heading -->

@@ -23,7 +23,11 @@ test('the role seeder grants only the expected role permissions', function () {
 });
 
 test('login authenticates with a session and logout invalidates it', function () {
-    $user = User::factory()->create(['role' => 'student']);
+    $user = User::factory()->create([
+        'name' => 'Taylor Login',
+        'email' => 'taylor.login@example.test',
+        'role' => 'student',
+    ]);
     $user->assignRole('student');
 
     $this->post(route('login.store'), [
@@ -32,9 +36,45 @@ test('login authenticates with a session and logout invalidates it', function ()
     ])->assertRedirect(route('dashboard'));
 
     $this->assertAuthenticatedAs($user);
+    $this->get('/portal/dashboard.html')
+        ->assertOk()
+        ->assertSee('Taylor Login')
+        ->assertSee('taylor.login@example.test');
 
     $this->post(route('logout'))->assertRedirect(route('login'));
     $this->assertGuest();
+});
+
+test('each signed-in role sees its own identity on its dashboard and profile', function () {
+    $accounts = [
+        ['role' => 'student', 'dashboard' => '/portal/dashboard.html', 'name' => 'Ava Student'],
+        ['role' => 'lecturer', 'dashboard' => '/portal/staff/dashboard.html', 'name' => 'Lee Lecturer'],
+        ['role' => 'administrator', 'dashboard' => '/portal/admin/dashboard.html', 'name' => 'Alex Admin'],
+    ];
+
+    foreach ($accounts as $account) {
+        $user = User::factory()->create([
+            'name' => $account['name'],
+            'email' => strtolower(str_replace(' ', '.', $account['name'])) . '@example.test',
+            'role' => $account['role'],
+        ]);
+        $user->assignRole($account['role']);
+
+        $this->actingAs($user)
+            ->get($account['dashboard'])
+            ->assertOk()
+            ->assertSee($account['name'])
+            ->assertSee($user->email)
+            ->assertSee('Good afternoon, ' . explode(' ', $account['name'])[0]);
+
+        $this->get('/portal/profile.html')
+            ->assertOk()
+            ->assertSee($account['name'])
+            ->assertSee($user->email)
+            ->assertSee(ucfirst($account['role']));
+
+        auth()->logout();
+    }
 });
 
 test('public registration links only an existing student and cannot choose a privileged role', function () {
@@ -48,6 +88,7 @@ test('public registration links only an existing student and cannot choose a pri
     $this->post(route('register.store'), [
         'name' => 'Sam Student',
         'email' => $student->email,
+        'student_number' => $student->student_number,
         'password' => 'StrongPass123',
         'password_confirmation' => 'StrongPass123',
         'role' => 'administrator',
@@ -58,18 +99,54 @@ test('public registration links only an existing student and cannot choose a pri
     expect($user->hasRole('student'))->toBeTrue()
         ->and($user->hasRole('administrator'))->toBeFalse()
         ->and($student->fresh()->user_id)->toBe($user->id);
+
+    $this->get('/portal/dashboard.html')
+        ->assertOk()
+        ->assertSee('Sam Student')
+        ->assertSee('sam.student@example.test');
 });
 
-test('registration rejects email addresses without a student record', function () {
+test('registration creates and links a student record for a new student', function () {
     $this->from(route('register'))->post(route('register.store'), [
-        'name' => 'Not a Student',
-        'email' => 'unknown@example.test',
+        'name' => 'New Student',
+        'email' => 'new.student@example.test',
+        'student_number' => 'STU300',
+        'password' => 'StrongPass123',
+        'password_confirmation' => 'StrongPass123',
+    ])->assertRedirect(route('dashboard'));
+
+    $user = User::where('email', 'new.student@example.test')->firstOrFail();
+    $student = Student::where('student_number', 'STU300')->firstOrFail();
+
+    expect($user->hasRole('student'))->toBeTrue()
+        ->and($student->user_id)->toBe($user->id)
+        ->and($student->first_name)->toBe('New')
+        ->and($student->last_name)->toBe('Student');
+
+    $this->get('/portal/dashboard.html')
+        ->assertOk()
+        ->assertSee('New Student')
+        ->assertSee('new.student@example.test');
+});
+
+test('registration rejects a mismatched existing student record', function () {
+    Student::create([
+        'student_number' => 'STU301',
+        'first_name' => 'Existing',
+        'last_name' => 'Student',
+        'email' => 'existing.student@example.test',
+    ]);
+
+    $this->from(route('register'))->post(route('register.store'), [
+        'name' => 'Existing Student',
+        'email' => 'existing.student@example.test',
+        'student_number' => 'STU999',
         'password' => 'StrongPass123',
         'password_confirmation' => 'StrongPass123',
     ])->assertRedirect(route('register'))
-        ->assertSessionHasErrors('email');
+        ->assertSessionHasErrors('student_number');
 
-    expect(User::where('email', 'unknown@example.test')->exists())->toBeFalse();
+    expect(User::where('email', 'existing.student@example.test')->exists())->toBeFalse();
 });
 
 test('students see available courses and only their own registrations and records', function () {

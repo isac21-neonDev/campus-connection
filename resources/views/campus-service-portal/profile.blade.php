@@ -1,4 +1,3 @@
-@verbatim
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -65,21 +64,24 @@
                     <!-- Start: Header user menu -->
                     <details class="menu-dropdown relative">
                         <summary class="flex items-center gap-2 bg-slate-50 rounded-lg p-1 text-sm border border-slate-200 hover:bg-slate-100 cursor-pointer list-none">
-                            <div class="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-[#2563eb] border border-blue-100 text-xs font-semibold">AN</div>
+                            <div class="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-[#2563eb] border border-blue-100 text-xs font-semibold">{{ mb_strtoupper(mb_substr(auth()->user()->name, 0, 1)) }}</div>
                             <div class="hidden md:block text-left mr-1">
-                                <div class="text-xs font-medium text-slate-900">Aisha Namuli</div>
-                                <div class="text-[10px] text-slate-500">Student</div>
+                                <div class="text-xs font-medium text-slate-900">{{ auth()->user()->name }}</div>
+                                <div class="text-[10px] text-slate-500">{{ ucfirst(str_replace('_', ' ', auth()->user()->getRoleNames()->first() ?? 'user')) }}</div>
                             </div>
                             <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400"></i>
                         </summary>
                         <div class="absolute right-0 mt-2 w-56 bg-white border border-slate-200 rounded-lg shadow-lg z-50">
                             <div class="px-4 py-3 border-b border-slate-200 bg-slate-50">
-                                <p class="text-sm font-medium">Aisha Namuli</p>
-                                <p class="text-xs text-slate-500 truncate">aisha.namuli@campus.ac.ug</p>
+                                <p class="text-sm font-medium">{{ auth()->user()->name }}</p>
+                                <p class="text-xs text-slate-500 truncate">{{ auth()->user()->email }}</p>
                             </div>
                             <a href="/portal/profile.html" class="flex items-center px-4 py-2 text-sm text-slate-600 hover:bg-slate-50"><i data-lucide="user" class="w-4 h-4 mr-2"></i>My Profile</a>
                             <a href="/portal/profile.html" class="flex items-center px-4 py-2 text-sm text-slate-600 hover:bg-slate-50"><i data-lucide="settings" class="w-4 h-4 mr-2"></i>Account Settings</a>
-                            <a href="/portal/login.html" class="flex items-center px-4 py-2 text-sm text-[#d97706] hover:bg-slate-50 border-t border-slate-200"><i data-lucide="log-out" class="w-4 h-4 mr-2"></i>Sign out</a>
+                            <form method="POST" action="{{ route('logout') }}" class="border-t border-slate-200">
+                                @csrf
+                                <button type="submit" class="flex w-full items-center px-4 py-2 text-left text-sm text-[#d97706] hover:bg-slate-50"><i data-lucide="log-out" class="w-4 h-4 mr-2"></i>Sign out</button>
+                            </form>
                         </div>
                     </details>
                     <!-- End: Header user menu -->
@@ -98,12 +100,12 @@
         <div class="mt-auto border-t border-slate-200 p-4">
             <div class="flex items-center space-x-3 mb-3">
                 <div class="relative">
-                    <div class="w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center bg-white text-sm font-semibold text-[#2563eb]">AN</div>
+                    <div class="w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center bg-white text-sm font-semibold text-[#2563eb]">{{ mb_strtoupper(mb_substr(auth()->user()->name, 0, 1)) }}</div>
                     <div class="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full"></div>
                 </div>
                 <div class="flex-1 min-w-0">
-                    <p class="text-sm font-medium text-slate-900 truncate">Aisha Namuli</p>
-                    <p class="text-xs text-slate-500 truncate">aisha.namuli@campus.ac.ug</p>
+                    <p class="text-sm font-medium text-slate-900 truncate">{{ auth()->user()->name }}</p>
+                    <p class="text-xs text-slate-500 truncate">{{ auth()->user()->email }}</p>
                 </div>
             </div>
             <div class="flex items-center gap-2 px-3 py-2 bg-white rounded-lg border border-slate-200">
@@ -130,15 +132,15 @@
             <form action="/portal/profile.html" method="get" class="bg-white border border-slate-200 rounded-xl p-6 space-y-5 shadow-sm max-w-2xl">
                 <div>
                     <label class="block text-sm font-medium text-slate-600 mb-2">Full name</label>
-                    <input class="input-field" name="name" value="Aisha Namuli">
+                    <input class="input-field" name="name" value="{{ auth()->user()->name }}" readonly>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-slate-600 mb-2">Email</label>
-                    <input type="email" class="input-field" name="email" value="aisha.namuli@campus.ac.ug">
+                    <input type="email" class="input-field" name="email" value="{{ auth()->user()->email }}" readonly>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-slate-600 mb-2">Role</label>
-                    <input class="input-field bg-slate-50" value="Student" disabled>
+                    <input class="input-field bg-slate-50" value="{{ ucfirst(str_replace('_', ' ', auth()->user()->getRoleNames()->first() ?? 'user')) }}" disabled>
                     <p class="text-xs text-slate-500 mt-2">Role changes are performed by an administrator.</p>
                 </div>
                 <hr class="border-slate-200">
@@ -177,4 +179,3 @@
 </body>
 </html>
 
-@endverbatim

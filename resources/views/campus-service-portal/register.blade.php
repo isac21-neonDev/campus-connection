@@ -29,8 +29,8 @@
             <div class="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8">
                 <div class="mb-6">
                     <h1 class="text-xl font-bold">Create your account</h1>
-                    <p class="mt-1 text-sm text-slate-500">Student accounts are linked to your campus student record. Ask the helpdesk administrator to create staff and administrator accounts.</p>
-                    <p class="mt-2 text-xs text-[#d97706]">All fields are required.</p>
+                    <p class="mt-1 text-sm text-slate-500">Create a student account with your student number and campus email. Staff and administrator accounts are created by the helpdesk administrator.</p>
+                    <p class="mt-2 text-xs text-[#d97706]">All fields are required. If your campus record already exists, use its matching student number and email.</p>
                 </div>
 
                 <!-- Start: Register form -->
@@ -41,11 +41,15 @@
                     @endif
                     <div>
                         <label for="name" class="block text-sm font-medium text-slate-600 mb-2">Full name <span class="text-[#d97706]">*</span></label>
-                        <input type="text" id="name" name="name" required minlength="2" autofocus placeholder="Aisha Namuli" class="input-field">
+                        <input type="text" id="name" name="name" required minlength="2" autofocus value="{{ old('name') }}" placeholder="Aisha Namuli" class="input-field">
                     </div>
                     <div>
                         <label for="email" class="block text-sm font-medium text-slate-600 mb-2">Campus email <span class="text-[#d97706]">*</span></label>
-                        <input type="email" id="email" name="email" required placeholder="aisha.namuli@campus.ac.ug" class="input-field">
+                        <input type="email" id="email" name="email" required value="{{ old('email') }}" placeholder="aisha.namuli@campus.ac.ug" class="input-field">
+                    </div>
+                    <div>
+                        <label for="student_number" class="block text-sm font-medium text-slate-600 mb-2">Student number <span class="text-[#d97706]">*</span></label>
+                        <input type="text" id="student_number" name="student_number" required maxlength="30" value="{{ old('student_number') }}" placeholder="e.g. STU006" class="input-field">
                     </div>
                     <div>
                         <label for="password" class="block text-sm font-medium text-slate-600 mb-2">Password <span class="text-[#d97706]">*</span></label>
