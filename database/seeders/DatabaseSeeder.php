@@ -18,26 +18,22 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory()->create([
-            'name' => 'Admin User',
-            'email' => 'admin@gmail.com',
-            'password' => bcrypt('admin123'),
-            'role' => 'admin',
-        ]);
+        $users = [
+            ['name' => 'Admin User', 'email' => 'admin@gmail.com', 'password' => 'admin123', 'role' => 'admin'],
+            ['name' => 'Student User', 'email' => 'student@gmail.com', 'password' => 'student123', 'role' => 'student'],
+            ['name' => 'Lecturer User', 'email' => 'lecturer@gmail.com', 'password' => 'lecturer123', 'role' => 'lecturer'],
+        ];
 
-        User::factory()->create([
-            'name' => 'Student User',
-            'email' => 'student@gmail.com',
-            'password' => bcrypt('student123'),
-            'role' => 'student',
-        ]);
-
-        User::factory()->create([
-            'name' => 'Lecturer User',
-            'email' => 'lecturer@gmail.com',
-            'password' => bcrypt('lecturer123'),
-            'role' => 'lecturer',
-        ]);
+        foreach ($users as $user) {
+            User::firstOrCreate(
+                ['email' => $user['email']],
+                [
+                    'name' => $user['name'],
+                    'password' => bcrypt($user['password']),
+                    'role' => $user['role'],
+                ],
+            );
+        }
 
         $students = [
             ['student_number' => 'STU001', 'first_name' => 'Isaac', 'last_name' => 'Kasasa', 'email' => 'isaac@gmail.com', 'programme' => 'BSc Computer Science', 'year_of_study' => 2],
@@ -48,7 +44,10 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach ($students as $student) {
-            Student::create($student);
+            Student::updateOrCreate(
+                ['student_number' => $student['student_number']],
+                $student,
+            );
         }
 
         $courses = [
@@ -59,7 +58,30 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach ($courses as $course) {
-            Course::create($course);
+            Course::updateOrCreate(
+                ['code' => $course['code']],
+                $course,
+            );
+        }
+
+        $registrations = [
+            ['student_number' => 'STU001', 'course_code' => 'BCS101'],
+            ['student_number' => 'STU002', 'course_code' => 'BCS101'],
+            ['student_number' => 'STU003', 'course_code' => 'BCS102'],
+            ['student_number' => 'STU004', 'course_code' => 'BCS103'],
+            ['student_number' => 'STU005', 'course_code' => 'BCS104'],
+        ];
+
+        foreach ($registrations as $registration) {
+            $student = Student::firstWhere('student_number', $registration['student_number']);
+            $course = Course::firstWhere('code', $registration['course_code']);
+
+            if ($student && $course) {
+                CourseRegistration::firstOrCreate([
+                    'student_id' => $student->id,
+                    'course_id' => $course->id,
+                ]);
+            }
         }
     }
 }

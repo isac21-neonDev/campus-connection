@@ -1,10 +1,17 @@
 <?php
 
+use App\Http\Controllers\CourseController;
+use App\Http\Controllers\RegistrationController;
+use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('campus-service-portal.index');
 });
+
+Route::resource('students', StudentController::class);
+Route::resource('courses', CourseController::class);
+Route::resource('registrations', RegistrationController::class);
 
 Route::get('/portal/{page?}', function (?string $page = null) {
     $page ??= 'index.html';
