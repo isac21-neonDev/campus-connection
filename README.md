@@ -1,3 +1,12 @@
+[bytecoders.sql](https://github.com/user-attachments/files/34597167/bytecoders.sql)
+<img width="960" height="540" alt="Screenshot 2026-11-10 022734" src="https://github.com/user-attachments/assets/a8391684-6d54-4772-a573-3da46e8b5b47" />
+<img width="960" height="540" alt="Screenshot 2026-11-10 022445" src="https://github.com/user-attachments/assets/f72a5f3e-e066-42e5-97d4-559b733ef07c" />
+<img width="960" height="540" alt="Screenshot 2026-11-10 022734" src="https://github.com/user-attachments/assets/293d1cb5-77fe-4800-be95-0495515a0f0c" />
+
+[bytecoders.sql](https://github.com/user-attachments/files/34596994/bytecoders.sql)
+<img width="960" height="540" alt="Screenshot 2026-11-10 022445" src="https://github.com/user-attachments/assets/8c1a201c-2c3e-4bc7-a4d8-5fb8b7ba3983" />
+[bytecoders.sql](https://github.com/user-attachments/files/34596946/bytecoders.sql)
+[bytecoders.sql](https://github.com/user-attachments/files/34596741/bytecoders.sql)
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
