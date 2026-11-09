@@ -14,6 +14,16 @@ beforeEach(function () {
     $this->seed(RoleAndPermissionSeeder::class);
 });
 
+test('public landing pages render the Kampus Konnect view', function () {
+    $this->get('/')
+        ->assertOk()
+        ->assertSee('Kampus Konnect | Campus helpdesk');
+
+    $this->get('/portal/index.html')
+        ->assertOk()
+        ->assertSee('Kampus Konnect | Campus helpdesk');
+});
+
 test('the role seeder grants only the expected role permissions', function () {
     expect(Role::findByName('administrator')->hasPermissionTo('users.manage'))->toBeTrue()
         ->and(Role::findByName('lecturer')->hasPermissionTo('students.view'))->toBeTrue()
@@ -43,6 +53,79 @@ test('login authenticates with a session and logout invalidates it', function ()
 
     $this->post(route('logout'))->assertRedirect(route('login'));
     $this->assertGuest();
+});
+
+test('login accepts the remember me checkbox', function () {
+    $user = User::factory()->create([
+        'email' => 'remember.login@example.test',
+        'role' => 'student',
+    ]);
+    $user->assignRole('student');
+
+    $this->post(route('login.store'), [
+        'email' => $user->email,
+        'password' => 'password',
+        'remember' => '1',
+    ])->assertRedirect(route('dashboard'));
+
+    $this->assertAuthenticatedAs($user);
+    expect($user->fresh()->remember_token)->not->toBeNull();
+});
+
+test('each role can sign in and access only its authorized entry points', function () {
+    $accounts = [
+        [
+            'role' => 'student',
+            'email' => 'student.login@example.test',
+            'dashboard' => '/portal/dashboard.html',
+            'allowed' => '/courses',
+            'denied' => '/students',
+        ],
+        [
+            'role' => 'lecturer',
+            'email' => 'lecturer.login@example.test',
+            'dashboard' => '/portal/staff/dashboard.html',
+            'allowed' => '/students',
+            'denied' => '/courses/create',
+        ],
+        [
+            'role' => 'administrator',
+            'email' => 'administrator.login@example.test',
+            'dashboard' => '/portal/admin/dashboard.html',
+            'allowed' => '/admin/users',
+            'denied' => '/portal/staff/dashboard.html',
+        ],
+    ];
+
+    foreach ($accounts as $account) {
+        $user = User::factory()->create([
+            'email' => $account['email'],
+            'role' => $account['role'],
+        ]);
+        $user->assignRole($account['role']);
+
+        $this->post(route('login.store'), [
+            'email' => $account['email'],
+            'password' => 'password',
+        ])->assertRedirect(route('dashboard'));
+
+        $this->get(route('dashboard'))
+            ->assertRedirect($account['dashboard']);
+
+        $portalDashboard = $this->get('/portal/dashboard.html');
+        if ($account['role'] === 'student') {
+            $portalDashboard->assertOk();
+        } else {
+            $portalDashboard->assertRedirect($account['dashboard']);
+        }
+
+        $this->get($account['dashboard'])->assertOk();
+        $this->get($account['allowed'])->assertOk();
+        $this->get($account['denied'])->assertForbidden();
+
+        $this->post(route('logout'))->assertRedirect(route('login'));
+        $this->assertGuest();
+    }
 });
 
 test('each signed-in role sees its own identity on its dashboard and profile', function () {
@@ -203,6 +286,41 @@ test('students see available courses and only their own registrations and record
     $this->get(route('registrations.show', $ownRegistration))->assertOk();
 });
 
+test('users with student view permission see enrolled students on course details', function () {
+    $user = User::factory()->create(['role' => 'student']);
+    $user->assignRole('student');
+    $user->givePermissionTo('students.view');
+
+    $course = Course::create(['code' => 'ENR101', 'title' => 'Enrolled Course']);
+    $zuluStudent = Student::create([
+        'student_number' => 'STU202',
+        'first_name' => 'Zoe',
+        'last_name' => 'Zulu',
+        'email' => 'zoe.zulu@example.test',
+    ]);
+    $alphaStudent = Student::create([
+        'student_number' => 'STU201',
+        'first_name' => 'Ava',
+        'last_name' => 'Alpha',
+        'email' => 'ava.alpha@example.test',
+    ]);
+    CourseRegistration::create([
+        'student_id' => $zuluStudent->id,
+        'course_id' => $course->id,
+    ]);
+    CourseRegistration::create([
+        'student_id' => $alphaStudent->id,
+        'course_id' => $course->id,
+    ]);
+
+    $this->actingAs($user)
+        ->get(route('courses.show', $course))
+        ->assertOk()
+        ->assertSeeInOrder(['Ava Alpha', 'Zoe Zulu'])
+        ->assertSee('STU201')
+        ->assertSee('STU202');
+});
+
 test('lecturers see assigned courses and students registered in those courses only', function () {
     $lecturer = User::factory()->create(['role' => 'lecturer']);
     $lecturer->assignRole('lecturer');
@@ -219,6 +337,7 @@ test('lecturers see assigned courses and students registered in those courses on
         'title' => 'Other Lecturer Course',
         'lecturer_id' => $otherLecturer->id,
     ]);
+    expect($lecturer->taughtCourse()->pluck('code')->all())->toBe(['LEC101']);
 
     $assignedStudent = Student::create([
         'student_number' => 'STU201',

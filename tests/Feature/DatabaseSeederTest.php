@@ -13,7 +13,7 @@ test('database seeder can run repeatedly without creating duplicate records', fu
     $this->seed(DatabaseSeeder::class);
     $this->seed(DatabaseSeeder::class);
 
-    expect(User::count())->toBe(3)
+    expect(User::count())->toBe(7)
         ->and(Student::count())->toBe(5)
         ->and(Course::count())->toBe(4)
         ->and(CourseRegistration::count())->toBe(5)

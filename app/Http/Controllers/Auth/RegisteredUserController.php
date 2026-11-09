@@ -17,7 +17,7 @@ class RegisteredUserController extends Controller
 {
     public function create(): View
     {
-        return view('campus-service-portal.register');
+        return view('Kampus-Konnect.register');
     }
 
     public function store(Request $request): RedirectResponse

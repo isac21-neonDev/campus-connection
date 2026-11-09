@@ -9,7 +9,7 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\UserAccessController;
 use Illuminate\Support\Facades\Route;
 
-Route::view('/', 'campus-service-portal.index');
+Route::view('/', 'Kampus-Konnect.index');
 
 Route::get('/login', [AuthenticatedSessionController::class, 'create'])
     ->middleware('guest')
@@ -38,16 +38,24 @@ Route::get('/dashboard', function () {
     };
 })->middleware('auth')->name('dashboard');
 
-Route::view('/portal/index.html', 'campus-service-portal.index');
-Route::view('/portal/login.html', 'campus-service-portal.login');
-Route::view('/portal/register.html', 'campus-service-portal.register');
-Route::view('/portal/contact.html', 'campus-service-portal.contact');
-Route::view('/portal/contact-list.html', 'campus-service-portal.contact-list');
-Route::view('/portal/forgot-password.html', 'campus-service-portal.forgot-password');
-Route::view('/portal/reset-password.html', 'campus-service-portal.reset-password');
+Route::view('/portal/index.html', 'Kampus-Konnect.index');
+Route::view('/portal/login.html', 'Kampus-Konnect.login');
+Route::view('/portal/register.html', 'Kampus-Konnect.register');
+Route::view('/portal/contact.html', 'Kampus-Konnect.contact');
+Route::view('/portal/contact-list.html', 'Kampus-Konnect.contact-list');
+Route::view('/portal/forgot-password.html', 'Kampus-Konnect.forgot-password');
+Route::view('/portal/reset-password.html', 'Kampus-Konnect.reset-password');
 
-Route::view('/portal/dashboard.html', 'campus-service-portal.dashboard')
-    ->middleware(['auth', 'role:student']);
+Route::get('/portal/dashboard.html', function () {
+    $user = auth()->user();
+
+    return match (true) {
+        $user->hasRole('administrator') => redirect('/portal/admin/dashboard.html'),
+        $user->hasRole('lecturer') => redirect('/portal/staff/dashboard.html'),
+        $user->hasRole('student') => view('Kampus-Konnect.dashboard'),
+        default => abort(403),
+    };
+})->middleware('auth');
 Route::get('/portal/staff/{page?}', [PortalPageController::class, 'staff'])
     ->middleware(['auth', 'role:lecturer'])
     ->where('page', '.*');
@@ -112,4 +120,3 @@ Route::middleware('auth')->group(function () {
     Route::patch('/admin/users/{user}/role', [UserAccessController::class, 'updateRole'])
         ->middleware('permission:users.manage')->name('admin.users.role');
 });
-

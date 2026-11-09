@@ -22,4 +22,17 @@
             </dl>
         </div>
     </div>
+
+    @if ($canViewStudents)
+        <div class="card shadow-sm mt-4">
+            <div class="card-body">
+                <h2 class="h5">Enrolled Students</h2>
+                @forelse ($students as $student)
+                    <p class="mb-1">{{ $student->first_name }} {{ $student->last_name }} ({{ $student->student_number }})</p>
+                @empty
+                    <p class="mb-0">No students are enrolled in this course.</p>
+                @endforelse
+            </div>
+        </div>
+    @endif
 @endsection

@@ -41,11 +41,11 @@
                     @endif
                     <div>
                         <label for="name" class="block text-sm font-medium text-slate-600 mb-2">Full name <span class="text-[#d97706]">*</span></label>
-                        <input type="text" id="name" name="name" required minlength="2" autofocus value="{{ old('name') }}" placeholder="Aisha Namuli" class="input-field">
+                        <input type="text" id="name" name="name" required minlength="2" autofocus value="{{ old('name') }}" placeholder="Nabbanja Catherine" class="input-field">
                     </div>
                     <div>
                         <label for="email" class="block text-sm font-medium text-slate-600 mb-2">Campus email <span class="text-[#d97706]">*</span></label>
-                        <input type="email" id="email" name="email" required value="{{ old('email') }}" placeholder="aisha.namuli@campus.ac.ug" class="input-field">
+                        <input type="email" id="email" name="email" required value="{{ old('email') }}" placeholder="nabbanja.catherine@campus.ac.ug" class="input-field">
                     </div>
                     <div>
                         <label for="student_number" class="block text-sm font-medium text-slate-600 mb-2">Student number <span class="text-[#d97706]">*</span></label>
@@ -82,4 +82,3 @@
     <script>lucide.createIcons();</script>
 </body>
 </html>
-

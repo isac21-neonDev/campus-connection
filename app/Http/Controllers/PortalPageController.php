@@ -30,7 +30,7 @@ class PortalPageController extends Controller
             404,
         );
 
-        $view = 'campus-service-portal.' . str_replace('/', '.', substr($page, 0, -5));
+        $view = 'Kampus-Konnect.' . str_replace('/', '.', substr($page, 0, -5));
 
         abort_unless(ViewFacade::exists($view), 404);
 

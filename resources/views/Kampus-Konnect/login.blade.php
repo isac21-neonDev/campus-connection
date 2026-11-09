@@ -63,7 +63,7 @@
                     </div>
                     <div class="flex items-center justify-between">
                         <label class="flex items-center gap-2 cursor-pointer">
-                            <input type="checkbox" name="remember" class="h-4 w-4 rounded border-slate-300 text-[#2563eb] focus:ring-[#2563eb]">
+                            <input type="checkbox" name="remember" value="1" class="h-4 w-4 rounded border-slate-300 text-[#2563eb] focus:ring-[#2563eb]">
                             <span class="text-sm text-slate-500">Keep me signed in</span>
                         </label>
                         <a href="/portal/forgot-password.html" class="text-sm font-medium text-[#2563eb] hover:text-[#1d4ed8]">Forgot password?</a>
@@ -95,4 +95,3 @@
     <script>lucide.createIcons();</script>
 </body>
 </html>
-

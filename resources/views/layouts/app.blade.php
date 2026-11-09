@@ -7,6 +7,12 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
 </head>
 <body>
+    <header class="bg-primary text-white py-2">
+        <div class="container d-flex justify-content-between align-items-center">
+            <span class="fw-bold">Kampus Konnect</span>
+            
+        </div>
+    </header>
     @php
         $user = auth()->user();
         $role = $user->getRoleNames()->first();

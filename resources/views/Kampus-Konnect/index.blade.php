@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kampus Konnect | Campus helpdesk</title>
     <meta name="description" content="Report a broken light, book a lecture hall, or get ICT help. Sign in with your campus email and follow your ticket until it is done.">
-    <link rel="icon" type="image/png" href="/campus-service-portal/assets/img/logo.png">
+    <link rel="icon" type="image/png" href="/Kampus-Konnect/assets/img/logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -33,7 +33,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
                 <a href="/portal/index.html" class="flex items-center gap-3">
-                    <img src="/campus-service-portal/assets/img/logo.png" alt="Kampus Konnect" class="h-11 w-11">
+                    <img src="/Kampus-Konnect/assets/img/logo.png" alt="Kampus Konnect" class="h-11 w-11">
                     <div class="hidden sm:block">
                         <p class="text-sm font-semibold text-slate-900 leading-tight">Kampus Konnect</p>
                         <p class="text-[11px] text-slate-500">Connect.Collaborate.Thrive</p>

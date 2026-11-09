@@ -12,7 +12,7 @@ class AuthenticatedSessionController extends Controller
 {
     public function create(): View
     {
-        return view('campus-service-portal.login');
+        return view('Kampus-Konnect.login');
     }
 
     public function store(Request $request): RedirectResponse
